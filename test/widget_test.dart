@@ -31,7 +31,7 @@ void main() {
     await tester.pumpWidget(_testApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Sign In'), findsOneWidget);
+    expect(find.text('SIGN IN'), findsOneWidget);
   });
 
   testWidgets('Login screen shows email and password fields', (tester) async {
