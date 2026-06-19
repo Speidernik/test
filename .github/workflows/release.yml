@@ -142,10 +142,10 @@ jobs:
           TAG="${{ steps.meta.outputs.tag }}"
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk \
-             "dist/warehouse-pro-${TAG}.apk"
+             "dist/todo-app-${TAG}.apk"
           cd dist
-          sha256sum "warehouse-pro-${TAG}.apk" > SHA256SUMS.txt
-          echo "✅ APK: $(du -sh warehouse-pro-${TAG}.apk | cut -f1)"
+          sha256sum "todo-app-${TAG}.apk" > SHA256SUMS.txt
+          echo "✅ APK: $(du -sh todo-app-${TAG}.apk | cut -f1)"
           cat SHA256SUMS.txt
 
       - name: Upload APK artifact
@@ -176,23 +176,17 @@ jobs:
           BUILD="${{ needs.build.outputs.build_number }}"
 
           cat > release_body.md << MARKDOWN
-          ## 🏭 Warehouse Pro ${TAG} (build ${BUILD})
+          ## Todo App ${TAG} (build ${BUILD})
 
           ### 📥 Installation
 
-          1. Download \`warehouse-pro-${TAG}.apk\` below
-          2. Transfer to your Zebra device via USB or MDM
+          1. Download \`todo-app-${TAG}.apk\` below
+          2. Transfer to your Android device via USB
           3. Enable **Install from unknown sources** in device settings
           4. Install the APK
 
           ### 🔍 Integrity
           Verify the download with \`SHA256SUMS.txt\`.
-
-          ### 🔫 DataWedge Scanner Setup
-          Create a DataWedge profile for \`com.example.starter_app\`:
-          - **Intent output** → enabled
-          - **Intent action**: \`com.starter_app.ACTION_SCAN\`
-          - **Intent delivery**: Broadcast intent
 
           ---
           MARKDOWN
@@ -201,7 +195,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.build.outputs.tag }}
-          name: "🏭 Warehouse Pro ${{ needs.build.outputs.tag }}"
+          name: "Todo App ${{ needs.build.outputs.tag }}"
           body_path: release_body.md
           generate_release_notes: true
           prerelease: ${{ github.event.inputs.prerelease == 'true' }}

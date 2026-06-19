@@ -22,12 +22,12 @@ class ProfileColors {
 
 const Map<ColorProfile, ProfileColors> colorProfiles = {
   ColorProfile.normal: ProfileColors(
-    primary: Color(0xFFF59E0B),
-    primaryLight: Color(0xFFFBBF24),
-    primaryDark: Color(0xFFD97706),
-    success: Color(0xFF10B981),
+    primary: Color(0xFF6366F1),
+    primaryLight: Color(0xFF818CF8),
+    primaryDark: Color(0xFF4F46E5),
+    success: Color(0xFF22C55E),
     error: Color(0xFFEF4444),
-    info: Color(0xFF6366F1),
+    info: Color(0xFF0EA5E9),
   ),
   ColorProfile.highContrast: ProfileColors(
     primary: Color(0xFFFFD700),
@@ -75,13 +75,5 @@ extension ColorProfileLabel on ColorProfile {
     ColorProfile.deuteranopia => 'Deuteranopia',
     ColorProfile.protanopia => 'Protanopia',
     ColorProfile.tritanopia => 'Tritanopia',
-  };
-
-  String get labelDe => switch (this) {
-    ColorProfile.normal => 'Normal',
-    ColorProfile.highContrast => 'Hoher Kontrast',
-    ColorProfile.deuteranopia => 'Deuteranopie',
-    ColorProfile.protanopia => 'Protanopie',
-    ColorProfile.tritanopia => 'Tritanopie',
   };
 }

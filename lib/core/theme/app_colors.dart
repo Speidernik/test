@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Brand
-  static const amber = Color(0xFFF59E0B);
-  static const amberLight = Color(0xFFFBBF24);
-  static const amberDark = Color(0xFFD97706);
+  // Brand — Indigo
+  static const primary = Color(0xFF6366F1);
+  static const primaryLight = Color(0xFF818CF8);
+  static const primaryDark = Color(0xFF4F46E5);
+
+  // Priority
+  static const priorityHigh = Color(0xFFEF4444);
+  static const priorityMedium = Color(0xFFF97316);
+  static const priorityLow = Color(0xFF22C55E);
 
   // Dark theme
   static const darkBg = Color(0xFF0F172A);
@@ -17,8 +22,8 @@ class AppColors {
   static const darkTextSecondary = Color(0xFF94A3B8);
 
   // Light theme
-  static const lightBgStart = Color(0xFFEFF6FF);
-  static const lightBgEnd = Color(0xFFF8FAFC);
+  static const lightBgStart = Color(0xFFF8FAFC);
+  static const lightBgEnd = Color(0xFFEEF2FF);
   static const lightSurface = Color(0xFFFFFFFF);
   static const lightBorder = Color(0xFFE2E8F0);
   static const lightTextPrimary = Color(0xFF0F172A);
@@ -26,6 +31,6 @@ class AppColors {
 
   // Semantic
   static const error = Color(0xFFEF4444);
-  static const success = Color(0xFF10B981);
-  static const warning = Color(0xFFF59E0B);
+  static const success = Color(0xFF22C55E);
+  static const warning = Color(0xFFF97316);
 }
