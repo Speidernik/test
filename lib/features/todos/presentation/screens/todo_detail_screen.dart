@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starter_app/features/todos/data/models/todo_model.dart';
 import 'package:starter_app/features/todos/data/todo_repository.dart';
+import 'package:uuid/uuid.dart';
 
 class TodoDetailScreen extends StatefulWidget {
   final Todo? todo;
   final bool isEmbedded;
   final VoidCallback? onDone;
+  final DateTime? initialDueDate;
 
   const TodoDetailScreen({
     super.key,
     this.todo,
     this.isEmbedded = false,
     this.onDone,
+    this.initialDueDate,
   });
 
   @override
@@ -23,9 +26,12 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleCtrl;
   late final TextEditingController _descCtrl;
+  final _subtaskCtrl = TextEditingController();
   late Priority _priority;
   TodoCategory? _category;
   DateTime? _dueDate;
+  DateTime? _reminder;
+  late List<Subtask> _subtasks;
 
   bool get _isEditing => widget.todo != null;
 
@@ -37,13 +43,16 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     _descCtrl = TextEditingController(text: t?.description ?? '');
     _priority = t?.priority ?? Priority.medium;
     _category = t?.category;
-    _dueDate = t?.dueDate;
+    _dueDate = t?.dueDate ?? widget.initialDueDate;
+    _reminder = t?.reminder;
+    _subtasks = List.from(t?.subtasks ?? []);
   }
 
   @override
   void dispose() {
     _titleCtrl.dispose();
     _descCtrl.dispose();
+    _subtaskCtrl.dispose();
     super.dispose();
   }
 
@@ -60,27 +69,28 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           clearCategory: _category == null,
           dueDate: _dueDate,
           clearDueDate: _dueDate == null,
+          reminder: _reminder,
+          clearReminder: _reminder == null,
+          subtasks: _subtasks,
         ),
       );
     } else {
       await repo.addTodo(
         Todo(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          id: const Uuid().v4(),
           title: _titleCtrl.text.trim(),
           description: _descCtrl.text.trim(),
           priority: _priority,
           category: _category,
           dueDate: _dueDate,
+          reminder: _reminder,
+          subtasks: _subtasks,
           createdAt: DateTime.now(),
         ),
       );
     }
     if (!mounted) return;
-    if (widget.isEmbedded) {
-      widget.onDone?.call();
-    } else {
-      Navigator.of(context).pop();
-    }
+    widget.isEmbedded ? widget.onDone?.call() : Navigator.of(context).pop();
   }
 
   Future<void> _delete() async {
@@ -107,11 +117,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     if (confirmed != true || !mounted) return;
     await context.read<TodoRepository>().deleteTodo(widget.todo!.id);
     if (!mounted) return;
-    if (widget.isEmbedded) {
-      widget.onDone?.call();
-    } else {
-      Navigator.of(context).pop();
-    }
+    widget.isEmbedded ? widget.onDone?.call() : Navigator.of(context).pop();
   }
 
   Future<void> _pickDate() async {
@@ -123,6 +129,41 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       lastDate: DateTime(now.year + 5),
     );
     if (picked != null) setState(() => _dueDate = picked);
+  }
+
+  Future<void> _pickReminder() async {
+    final now = DateTime.now();
+    final initDate = _reminder ?? _dueDate ?? now;
+    final date = await showDatePicker(
+      context: context,
+      initialDate: initDate.isAfter(now) ? initDate : now,
+      firstDate: now,
+      lastDate: DateTime(now.year + 5),
+    );
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_reminder ?? now),
+    );
+    if (time == null || !mounted) return;
+    setState(
+      () => _reminder = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      ),
+    );
+  }
+
+  void _addSubtask() {
+    final text = _subtaskCtrl.text.trim();
+    if (text.isEmpty) return;
+    setState(() {
+      _subtasks.add(Subtask(id: const Uuid().v4(), title: text));
+      _subtaskCtrl.clear();
+    });
   }
 
   @override
@@ -221,6 +262,60 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 ],
               ],
             ),
+            const SizedBox(height: 24),
+            Text('Reminder', style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.notifications_outlined, size: 18),
+                    label: Text(
+                      _reminder != null
+                          ? _formatDateTime(_reminder!)
+                          : 'Set reminder',
+                    ),
+                    onPressed: _pickReminder,
+                    style: OutlinedButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                if (_reminder != null) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() => _reminder = null),
+                    tooltip: 'Clear reminder',
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 24),
+            Text('Subtasks', style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            _SubtaskEditor(
+              subtasks: _subtasks,
+              controller: _subtaskCtrl,
+              onAdd: _addSubtask,
+              onToggle: (id) => setState(() {
+                final idx = _subtasks.indexWhere((s) => s.id == id);
+                if (idx != -1) {
+                  _subtasks[idx] = _subtasks[idx].copyWith(
+                    isCompleted: !_subtasks[idx].isCompleted,
+                  );
+                }
+              }),
+              onRemove: (id) =>
+                  setState(() => _subtasks.removeWhere((s) => s.id == id)),
+            ),
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
@@ -263,12 +358,18 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               icon: const Icon(Icons.delete_outline),
               color: theme.colorScheme.error,
               onPressed: _delete,
-              tooltip: 'Delete task',
             ),
         ],
       ),
       body: body,
     );
+  }
+
+  String _formatDateTime(DateTime dt) {
+    final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+    final minute = dt.minute.toString().padLeft(2, '0');
+    final period = dt.hour < 12 ? 'AM' : 'PM';
+    return '${_formatDate(dt)}  $hour:$minute $period';
   }
 
   String _formatDate(DateTime date) {
@@ -290,10 +391,80 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   }
 }
 
+// ─── Subtask editor ──────────────────────────────────────────────────────────
+
+class _SubtaskEditor extends StatelessWidget {
+  final List<Subtask> subtasks;
+  final TextEditingController controller;
+  final VoidCallback onAdd;
+  final ValueChanged<String> onToggle;
+  final ValueChanged<String> onRemove;
+
+  const _SubtaskEditor({
+    required this.subtasks,
+    required this.controller,
+    required this.onAdd,
+    required this.onToggle,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ...subtasks.map(
+          (s) => ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: Checkbox(
+              value: s.isCompleted,
+              onChanged: (_) => onToggle(s.id),
+              shape: const CircleBorder(),
+            ),
+            title: Text(
+              s.title,
+              style: TextStyle(
+                decoration: s.isCompleted ? TextDecoration.lineThrough : null,
+              ),
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.close, size: 16),
+              onPressed: () => onRemove(s.id),
+              tooltip: 'Remove',
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(
+                  hintText: 'Add a subtask…',
+                  isDense: true,
+                ),
+                onSubmitted: (_) => onAdd(),
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton.filled(
+              icon: const Icon(Icons.add, size: 18),
+              onPressed: onAdd,
+              tooltip: 'Add subtask',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Priority selector ────────────────────────────────────────────────────────
+
 class _PrioritySelector extends StatelessWidget {
   final Priority value;
   final ValueChanged<Priority> onChanged;
-
   const _PrioritySelector({required this.value, required this.onChanged});
 
   @override
@@ -321,7 +492,6 @@ class _PriorityChip extends StatelessWidget {
   final Priority priority;
   final bool isSelected;
   final VoidCallback onTap;
-
   const _PriorityChip({
     required this.priority,
     required this.isSelected,
@@ -364,10 +534,11 @@ class _PriorityChip extends StatelessWidget {
   }
 }
 
+// ─── Category selector ────────────────────────────────────────────────────────
+
 class _CategorySelector extends StatelessWidget {
   final TodoCategory? value;
   final ValueChanged<TodoCategory?> onChanged;
-
   const _CategorySelector({required this.value, required this.onChanged});
 
   @override
@@ -376,24 +547,22 @@ class _CategorySelector extends StatelessWidget {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: [
-        ...TodoCategory.values.map((c) {
-          final selected = value == c;
-          return FilterChip(
-            label: Text(c.label),
-            selected: selected,
-            onSelected: (_) => onChanged(selected ? null : c),
-            selectedColor: theme.colorScheme.primary.withAlpha(40),
-            checkmarkColor: theme.colorScheme.primary,
-            labelStyle: TextStyle(
-              color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurface,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-            ),
-          );
-        }),
-      ],
+      children: TodoCategory.values.map((c) {
+        final selected = value == c;
+        return FilterChip(
+          label: Text(c.label),
+          selected: selected,
+          onSelected: (_) => onChanged(selected ? null : c),
+          selectedColor: theme.colorScheme.primary.withAlpha(40),
+          checkmarkColor: theme.colorScheme.primary,
+          labelStyle: TextStyle(
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.onSurface,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+          ),
+        );
+      }).toList(),
     );
   }
 }

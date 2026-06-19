@@ -1,28 +1,47 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:starter_app/core/notifications/notification_service.dart';
 import 'package:starter_app/features/todos/data/models/todo_model.dart';
+import 'package:starter_app/features/todos/data/sources/todo_data_source.dart';
 
 enum TodoFilter { all, active, completed, today }
 
 class TodoRepository extends ChangeNotifier {
-  static const _key = 'todos_v1';
+  TodoDataSource? _source;
+  StreamSubscription<List<Todo>>? _sub;
 
   List<Todo> _todos = [];
   TodoFilter _filter = TodoFilter.all;
   TodoCategory? _categoryFilter;
+  SortOption _sortOption = SortOption.priority;
+  String _searchQuery = '';
 
-  List<Todo> get allTodos => List.unmodifiable(_todos);
+  // ── Getters ────────────────────────────────────────────────────────────────
+
   TodoFilter get filter => _filter;
   TodoCategory? get categoryFilter => _categoryFilter;
+  SortOption get sortOption => _sortOption;
+  String get searchQuery => _searchQuery;
 
+  List<Todo> get allTodos => List.unmodifiable(_todos);
   int get totalCount => _todos.length;
   int get activeCount => _todos.where((t) => !t.isCompleted).length;
   int get completedCount => _todos.where((t) => t.isCompleted).length;
 
   List<Todo> get filteredTodos {
     var result = List<Todo>.from(_todos);
+
+    if (_searchQuery.isNotEmpty) {
+      final q = _searchQuery.toLowerCase();
+      result = result
+          .where(
+            (t) =>
+                t.title.toLowerCase().contains(q) ||
+                t.description.toLowerCase().contains(q),
+          )
+          .toList();
+    }
 
     if (_categoryFilter != null) {
       result = result.where((t) => t.category == _categoryFilter).toList();
@@ -42,53 +61,92 @@ class TodoRepository extends ChangeNotifier {
     };
 
     result.sort((a, b) {
+      // Completed tasks always sink to the bottom
       if (a.isCompleted != b.isCompleted) return a.isCompleted ? 1 : -1;
-      final p = b.priority.index.compareTo(a.priority.index);
-      if (p != 0) return p;
-      return b.createdAt.compareTo(a.createdAt);
+      return switch (_sortOption) {
+        SortOption.priority => b.priority.index.compareTo(a.priority.index),
+        SortOption.dueDate => _compareDueDates(a, b),
+        SortOption.alphabetical => a.title.toLowerCase().compareTo(
+          b.title.toLowerCase(),
+        ),
+        SortOption.createdAt => b.createdAt.compareTo(a.createdAt),
+      };
     });
 
     return result;
   }
 
-  Future<void> loadTodos() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getStringList(_key);
-    if (raw != null) {
-      _todos = raw
-          .map((s) => Todo.fromJson(jsonDecode(s) as Map<String, dynamic>))
-          .toList();
-    }
-    notifyListeners();
+  int _compareDueDates(Todo a, Todo b) {
+    if (a.dueDate == null && b.dueDate == null) return 0;
+    if (a.dueDate == null) return 1;
+    if (b.dueDate == null) return -1;
+    return a.dueDate!.compareTo(b.dueDate!);
   }
 
+  // ── Source management ─────────────────────────────────────────────────────
+
+  /// Call this whenever the active list changes (list switch or first load).
+  void attachSource(TodoDataSource source) {
+    _sub?.cancel();
+    _source?.close();
+    _source = source;
+    _sub = source.watchAll().listen((todos) {
+      _todos = todos;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    _source?.close();
+    super.dispose();
+  }
+
+  // ── CRUD ──────────────────────────────────────────────────────────────────
+
   Future<void> addTodo(Todo todo) async {
-    _todos.insert(0, todo);
-    notifyListeners();
-    await _persist();
+    await _source!.add(todo);
+    await NotificationService.scheduleReminder(
+      todoId: todo.id,
+      title: todo.title,
+      description: todo.description,
+      at: todo.reminder,
+    );
   }
 
   Future<void> updateTodo(Todo todo) async {
-    final idx = _todos.indexWhere((t) => t.id == todo.id);
-    if (idx == -1) return;
-    _todos[idx] = todo;
-    notifyListeners();
-    await _persist();
+    await _source!.update(todo);
+    await NotificationService.scheduleReminder(
+      todoId: todo.id,
+      title: todo.title,
+      description: todo.description,
+      at: todo.reminder,
+    );
   }
 
   Future<void> deleteTodo(String id) async {
-    _todos.removeWhere((t) => t.id == id);
-    notifyListeners();
-    await _persist();
+    await _source!.remove(id);
+    await NotificationService.cancelReminder(id);
   }
 
-  Future<void> toggleComplete(String id) async {
-    final idx = _todos.indexWhere((t) => t.id == id);
-    if (idx == -1) return;
-    _todos[idx] = _todos[idx].copyWith(isCompleted: !_todos[idx].isCompleted);
-    notifyListeners();
-    await _persist();
+  Future<void> toggleComplete(String id) {
+    final t = _todos.firstWhere((t) => t.id == id);
+    return _source!.update(t.copyWith(isCompleted: !t.isCompleted));
   }
+
+  Future<void> toggleSubtask(String todoId, String subtaskId) {
+    final t = _todos.firstWhere((t) => t.id == todoId);
+    final updated = t.subtasks
+        .map(
+          (s) =>
+              s.id == subtaskId ? s.copyWith(isCompleted: !s.isCompleted) : s,
+        )
+        .toList();
+    return _source!.update(t.copyWith(subtasks: updated));
+  }
+
+  // ── Filters / sort ────────────────────────────────────────────────────────
 
   void setFilter(TodoFilter f) {
     if (_filter == f) return;
@@ -96,17 +154,21 @@ class TodoRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCategoryFilter(TodoCategory? category) {
-    if (_categoryFilter == category) return;
-    _categoryFilter = category;
+  void setCategoryFilter(TodoCategory? c) {
+    if (_categoryFilter == c) return;
+    _categoryFilter = c;
     notifyListeners();
   }
 
-  Future<void> _persist() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      _key,
-      _todos.map((t) => jsonEncode(t.toJson())).toList(),
-    );
+  void setSortOption(SortOption s) {
+    if (_sortOption == s) return;
+    _sortOption = s;
+    notifyListeners();
+  }
+
+  void setSearchQuery(String q) {
+    if (_searchQuery == q) return;
+    _searchQuery = q;
+    notifyListeners();
   }
 }

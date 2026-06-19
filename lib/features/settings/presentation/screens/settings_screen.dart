@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:starter_app/core/auth/auth_repository.dart';
 import 'package:starter_app/core/settings/settings_notifier.dart';
 import 'package:starter_app/core/theme/color_profiles.dart';
 
@@ -9,6 +10,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsNotifier>();
+    final auth = context.watch<AuthRepository>();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -20,6 +22,41 @@ class SettingsScreen extends StatelessWidget {
           _ThemeTile(settings: settings),
           const Divider(height: 1, indent: 16, endIndent: 16),
           _ColorProfileTile(settings: settings),
+          const SizedBox(height: 24),
+          _SectionHeader('Account'),
+          if (auth.isLoggedIn)
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: theme.colorScheme.primaryContainer,
+                child: Text(
+                  auth.user!.initials,
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              title: Text(auth.user!.displayName),
+              subtitle: Text(
+                auth.user!.email,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ListTile(
+            leading: Icon(
+              auth.isLoggedIn ? Icons.logout_outlined : Icons.login_outlined,
+              color: auth.isLoggedIn ? theme.colorScheme.error : null,
+            ),
+            title: Text(
+              auth.isLoggedIn
+                  ? 'Sign out'
+                  : auth.isOffline
+                  ? 'Sign in'
+                  : 'Sign in / Sign up',
+            ),
+            textColor: auth.isLoggedIn ? theme.colorScheme.error : null,
+            onTap: () => auth.signOut(),
+          ),
           const SizedBox(height: 24),
           _SectionHeader('About'),
           ListTile(

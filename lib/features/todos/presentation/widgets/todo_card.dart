@@ -39,7 +39,7 @@ class TodoCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -76,6 +76,10 @@ class TodoCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
+                      if (todo.hasSubtasks) ...[
+                        const SizedBox(height: 6),
+                        _SubtaskProgress(todo: todo),
+                      ],
                       const SizedBox(height: 6),
                       Wrap(
                         spacing: 6,
@@ -110,8 +114,7 @@ class TodoCard extends StatelessWidget {
   bool _isOverdue(Todo t) {
     if (t.dueDate == null || t.isCompleted) return false;
     final now = DateTime.now();
-    final due = t.dueDate!;
-    return due.isBefore(DateTime(now.year, now.month, now.day));
+    return t.dueDate!.isBefore(DateTime(now.year, now.month, now.day));
   }
 
   String _formatDate(DateTime date) {
@@ -133,6 +136,49 @@ class TodoCard extends StatelessWidget {
   }
 }
 
+// ─── Sub-widgets ──────────────────────────────────────────────────────────────
+
+class _SubtaskProgress extends StatelessWidget {
+  final Todo todo;
+  const _SubtaskProgress({required this.todo});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final done = todo.subtasksDone;
+    final total = todo.subtasks.length;
+    final progress = total > 0 ? done / total : 0.0;
+
+    return Row(
+      children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 4,
+              backgroundColor: theme.colorScheme.onSurface.withAlpha(20),
+              valueColor: AlwaysStoppedAnimation(
+                progress == 1.0
+                    ? const Color(0xFF22C55E)
+                    : theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          '$done/$total',
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.onSurface.withAlpha(140),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PriorityCheckbox extends StatelessWidget {
   final Priority priority;
   final bool isCompleted;
@@ -144,7 +190,7 @@ class _PriorityCheckbox extends StatelessWidget {
     required this.onTap,
   });
 
-  Color _priorityColor(BuildContext context) => switch (priority) {
+  Color get _color => switch (priority) {
     Priority.high => const Color(0xFFEF4444),
     Priority.medium => const Color(0xFFF97316),
     Priority.low => const Color(0xFF22C55E),
@@ -152,7 +198,6 @@ class _PriorityCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _priorityColor(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -161,8 +206,8 @@ class _PriorityCheckbox extends StatelessWidget {
         height: 24,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isCompleted ? color : Colors.transparent,
-          border: Border.all(color: color, width: 2),
+          color: isCompleted ? _color : Colors.transparent,
+          border: Border.all(color: _color, width: 2),
         ),
         child: isCompleted
             ? const Icon(Icons.check, size: 14, color: Colors.white)
