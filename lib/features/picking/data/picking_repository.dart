@@ -10,22 +10,28 @@ class PickingRepository {
       date: DateTime.now().subtract(const Duration(minutes: 10)),
       items: [
         PickingItem(
-          id: 'p1', sku: 'SKU-4421',
+          id: 'p1',
+          sku: 'SKU-4421',
           description: 'Blue Widget Box 500ml',
           location: 'Zone A / Row 3 / Shelf 2',
-          quantity: 6, barcode: 'BC4421001',
+          quantity: 6,
+          barcode: 'BC4421001',
         ),
         PickingItem(
-          id: 'p2', sku: 'SKU-8832',
+          id: 'p2',
+          sku: 'SKU-8832',
           description: 'Red Container 1L',
           location: 'Zone A / Row 3 / Shelf 4',
-          quantity: 2, barcode: 'BC8832002',
+          quantity: 2,
+          barcode: 'BC8832002',
         ),
         PickingItem(
-          id: 'p3', sku: 'SKU-7790',
+          id: 'p3',
+          sku: 'SKU-7790',
           description: 'Foam Packing Sheet',
           location: 'Zone B / Row 2 / Shelf 1',
-          quantity: 10, barcode: 'BC7790005',
+          quantity: 10,
+          barcode: 'BC7790005',
         ),
       ],
     ),
@@ -37,29 +43,37 @@ class PickingRepository {
       date: DateTime.now().subtract(const Duration(hours: 1)),
       items: [
         PickingItem(
-          id: 'p4', sku: 'SKU-9901',
+          id: 'p4',
+          sku: 'SKU-9901',
           description: 'Plastic Pallet 120x80',
           location: 'Zone D / Row 5 / Shelf 3',
-          quantity: 2, barcode: 'BC9901006',
+          quantity: 2,
+          barcode: 'BC9901006',
           pickedQuantity: 1,
         ),
         PickingItem(
-          id: 'p5', sku: 'SKU-2245',
+          id: 'p5',
+          sku: 'SKU-2245',
           description: 'Glass Bottle 750ml',
           location: 'Zone B / Row 1 / Shelf 5',
-          quantity: 12, barcode: 'BC2245007',
+          quantity: 12,
+          barcode: 'BC2245007',
         ),
         PickingItem(
-          id: 'p6', sku: 'SKU-3310',
+          id: 'p6',
+          sku: 'SKU-3310',
           description: 'Cardboard Box Large',
           location: 'Zone B / Row 2 / Shelf 1',
-          quantity: 8, barcode: 'BC3310004',
+          quantity: 8,
+          barcode: 'BC3310004',
         ),
         PickingItem(
-          id: 'p7', sku: 'SKU-6612',
+          id: 'p7',
+          sku: 'SKU-6612',
           description: 'Cork Stopper Set (100)',
           location: 'Zone C / Row 1 / Shelf 4',
-          quantity: 1, barcode: 'BC6612008',
+          quantity: 1,
+          barcode: 'BC6612008',
         ),
       ],
     ),
@@ -71,10 +85,12 @@ class PickingRepository {
       date: DateTime.now().subtract(const Duration(hours: 4)),
       items: [
         PickingItem(
-          id: 'p8', sku: 'SKU-5501',
+          id: 'p8',
+          sku: 'SKU-5501',
           description: 'Label Roll A4',
           location: 'Zone A / Row 4 / Shelf 1',
-          quantity: 3, barcode: 'BC5501009',
+          quantity: 3,
+          barcode: 'BC5501009',
           pickedQuantity: 3,
         ),
       ],
@@ -87,16 +103,20 @@ class PickingRepository {
       date: DateTime.now().subtract(const Duration(minutes: 5)),
       items: [
         PickingItem(
-          id: 'p9', sku: 'SKU-1156',
+          id: 'p9',
+          sku: 'SKU-1156',
           description: 'Yellow Drum 5L',
           location: 'Zone C / Row 3 / Shelf 2',
-          quantity: 4, barcode: 'BC1156003',
+          quantity: 4,
+          barcode: 'BC1156003',
         ),
         PickingItem(
-          id: 'p10', sku: 'SKU-3388',
+          id: 'p10',
+          sku: 'SKU-3388',
           description: 'Shrink Wrap 500m',
           location: 'Zone D / Row 1 / Shelf 3',
-          quantity: 2, barcode: 'BC3388010',
+          quantity: 2,
+          barcode: 'BC3388010',
         ),
       ],
     ),
@@ -124,9 +144,7 @@ class PickingRepository {
       orElse: () => throw StateError('Picking list not found'),
     );
     try {
-      final item = list.items.firstWhere(
-        (i) => i.barcode == barcode.trim(),
-      );
+      final item = list.items.firstWhere((i) => i.barcode == barcode.trim());
       if (item.isComplete) return 'already_picked';
       item.pickedQuantity++;
       return null;

@@ -19,20 +19,22 @@ class SettingsNotifier extends ChangeNotifier {
   ColorProfile get colorProfile => _colorProfile;
   AppLanguage get language => _language;
 
-  Locale get locale => _language == AppLanguage.german
-      ? const Locale('de')
-      : const Locale('en');
+  Locale get locale =>
+      _language == AppLanguage.german ? const Locale('de') : const Locale('en');
 
   AppStrings get strings => AppStrings(locale);
 
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    _themeMode =
-        (prefs.getBool(_keyDark) ?? true) ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = (prefs.getBool(_keyDark) ?? true)
+        ? ThemeMode.dark
+        : ThemeMode.light;
     final profileIndex = prefs.getInt(_keyProfile) ?? 0;
-    _colorProfile = ColorProfile.values[profileIndex.clamp(0, ColorProfile.values.length - 1)];
+    _colorProfile = ColorProfile
+        .values[profileIndex.clamp(0, ColorProfile.values.length - 1)];
     final langIndex = prefs.getInt(_keyLang) ?? 0;
-    _language = AppLanguage.values[langIndex.clamp(0, AppLanguage.values.length - 1)];
+    _language =
+        AppLanguage.values[langIndex.clamp(0, AppLanguage.values.length - 1)];
     notifyListeners();
   }
 

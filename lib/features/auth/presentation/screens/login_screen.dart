@@ -45,9 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = false);
 
     if (result.isSuccess) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
     } else {
       setState(() => _errorMessage = result.error);
     }
@@ -97,12 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall
-                                      ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.5,
+                                      ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   'Access your warehouse dashboard',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
                                         color: isDark
                                             ? AppColors.darkTextSecondary
                                             : AppColors.lightTextSecondary,
@@ -115,12 +119,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   textInputAction: TextInputAction.next,
                                   decoration: const InputDecoration(
                                     labelText: 'Email Address',
-                                    prefixIcon: Icon(Icons.alternate_email_rounded),
+                                    prefixIcon: Icon(
+                                      Icons.alternate_email_rounded,
+                                    ),
                                     hintText: 'you@company.com',
                                   ),
                                   validator: (v) {
-                                    if (v == null || v.trim().isEmpty) return 'Email is required';
-                                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v)) {
+                                    if (v == null || v.trim().isEmpty)
+                                      return 'Email is required';
+                                    if (!RegExp(
+                                      r'^[^@]+@[^@]+\.[^@]+',
+                                    ).hasMatch(v)) {
                                       return 'Enter a valid email';
                                     }
                                     return null;
@@ -134,7 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onFieldSubmitted: (_) => _login(),
                                   decoration: InputDecoration(
                                     labelText: 'Password',
-                                    prefixIcon: const Icon(Icons.lock_outline_rounded),
+                                    prefixIcon: const Icon(
+                                      Icons.lock_outline_rounded,
+                                    ),
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         _obscurePassword
@@ -142,13 +153,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                             : Icons.visibility_off_outlined,
                                       ),
                                       onPressed: () => setState(
-                                        () => _obscurePassword = !_obscurePassword,
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
                                       ),
                                     ),
                                   ),
                                   validator: (v) {
-                                    if (v == null || v.isEmpty) return 'Password is required';
-                                    if (v.length < 6) return 'Minimum 6 characters';
+                                    if (v == null || v.isEmpty)
+                                      return 'Password is required';
+                                    if (v.length < 6)
+                                      return 'Minimum 6 characters';
                                     return null;
                                   },
                                 ),
@@ -165,7 +179,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   const SizedBox(height: 12),
                                 ],
                                 const SizedBox(height: 4),
-                                _SignInButton(isLoading: _isLoading, onPressed: _login),
+                                _SignInButton(
+                                  isLoading: _isLoading,
+                                  onPressed: _login,
+                                ),
                                 const SizedBox(height: 4),
                               ],
                             ),
@@ -324,7 +341,11 @@ class _ErrorBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded, color: AppColors.error, size: 16),
+          const Icon(
+            Icons.error_outline_rounded,
+            color: AppColors.error,
+            size: 16,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

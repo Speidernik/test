@@ -20,9 +20,13 @@ class SettingsScreen extends StatelessWidget {
             children: [
               _iconBox(Icons.settings_rounded),
               const SizedBox(width: 10),
-              Text(s.settings,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, letterSpacing: 1)),
+              Text(
+                s.settings,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                ),
+              ),
             ],
           ),
           pinned: true,
@@ -112,8 +116,11 @@ class SettingsScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.qr_code_scanner_rounded,
-                            color: AppColors.amber, size: 20),
+                        const Icon(
+                          Icons.qr_code_scanner_rounded,
+                          color: AppColors.amber,
+                          size: 20,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -121,9 +128,7 @@ class SettingsScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Zebra DataWedge',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
+                                style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(height: 4),
@@ -163,13 +168,13 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _iconBox(IconData icon) => Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: AppColors.amber,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(icon, color: Colors.white, size: 18),
-      );
+    padding: const EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      color: AppColors.amber,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Icon(icon, color: Colors.white, size: 18),
+  );
 }
 
 // ── Reusable sub-widgets ──────────────────────────────────────────────────────
@@ -180,13 +185,13 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        title.toUpperCase(),
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              letterSpacing: 1.5,
-              color: AppColors.amber,
-              fontSize: 11,
-            ),
-      );
+    title.toUpperCase(),
+    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+      letterSpacing: 1.5,
+      color: AppColors.amber,
+      fontSize: 11,
+    ),
+  );
 }
 
 class _SettingsCard extends StatelessWidget {
@@ -196,14 +201,15 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
-        ),
-        child: Column(children: children),
-      );
+    decoration: BoxDecoration(
+      color: isDark ? AppColors.darkSurface : Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+      ),
+    ),
+    child: Column(children: children),
+  );
 }
 
 class _Divider extends StatelessWidget {
@@ -212,10 +218,10 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Divider(
-        height: 1,
-        indent: 52,
-        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-      );
+    height: 1,
+    indent: 52,
+    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+  );
 }
 
 class _SwitchTile extends StatelessWidget {
@@ -232,27 +238,28 @@ class _SwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: Row(
-          children: [
-            Icon(icon, color: AppColors.amber, size: 20),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w500)),
-            ),
-            Switch(
-              value: value,
-              activeThumbColor: AppColors.amber,
-              activeTrackColor: AppColors.amber.withAlpha(77),
-              onChanged: onChanged,
-            ),
-          ],
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    child: Row(
+      children: [
+        Icon(icon, color: AppColors.amber, size: 20),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            title,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
         ),
-      );
+        Switch(
+          value: value,
+          activeThumbColor: AppColors.amber,
+          activeTrackColor: AppColors.amber.withAlpha(77),
+          onChanged: onChanged,
+        ),
+      ],
+    ),
+  );
 }
 
 class _RadioTile<T> extends StatelessWidget {
@@ -271,34 +278,33 @@ class _RadioTile<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () => onChanged(value),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.amber, size: 20),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w500)),
-              ),
-              Icon(
-                value == groupValue
-                    ? Icons.check_circle_rounded
-                    : Icons.radio_button_unchecked_rounded,
-                color: value == groupValue
-                    ? AppColors.amber
-                    : AppColors.darkBorder,
-                size: 22,
-              ),
-            ],
+    borderRadius: BorderRadius.circular(16),
+    onTap: () => onChanged(value),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.amber, size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+            ),
           ),
-        ),
-      );
+          Icon(
+            value == groupValue
+                ? Icons.check_circle_rounded
+                : Icons.radio_button_unchecked_rounded,
+            color: value == groupValue ? AppColors.amber : AppColors.darkBorder,
+            size: 22,
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _ColorProfileTile extends StatelessWidget {
@@ -337,15 +343,17 @@ class _ColorProfileTile extends StatelessWidget {
             Expanded(
               child: Text(
                 isGerman ? profile.labelDe : profile.label,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.w500),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
             ),
             if (isSelected)
-              const Icon(Icons.check_circle_rounded,
-                  color: AppColors.amber, size: 20),
+              const Icon(
+                Icons.check_circle_rounded,
+                color: AppColors.amber,
+                size: 20,
+              ),
           ],
         ),
       ),
@@ -359,14 +367,14 @@ class _Swatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 14,
-        height: 14,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withAlpha(51), width: 1),
-        ),
-      );
+    width: 14,
+    height: 14,
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.white.withAlpha(51), width: 1),
+    ),
+  );
 }
 
 class _InfoTile extends StatelessWidget {
@@ -381,24 +389,24 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    child: Row(
+      children: [
+        Icon(icon, color: AppColors.amber, size: 20),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppColors.amber, size: 20),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600)),
-                Text(subtitle,
-                    style: Theme.of(context).textTheme.bodySmall),
-              ],
+            Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
+            Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
-      );
+      ],
+    ),
+  );
 }

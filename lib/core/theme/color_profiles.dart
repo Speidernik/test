@@ -70,18 +70,18 @@ ProfileColors profileColors(ColorProfile p) => colorProfiles[p]!;
 
 extension ColorProfileLabel on ColorProfile {
   String get label => switch (this) {
-        ColorProfile.normal => 'Normal',
-        ColorProfile.highContrast => 'High Contrast',
-        ColorProfile.deuteranopia => 'Deuteranopia',
-        ColorProfile.protanopia => 'Protanopia',
-        ColorProfile.tritanopia => 'Tritanopia',
-      };
+    ColorProfile.normal => 'Normal',
+    ColorProfile.highContrast => 'High Contrast',
+    ColorProfile.deuteranopia => 'Deuteranopia',
+    ColorProfile.protanopia => 'Protanopia',
+    ColorProfile.tritanopia => 'Tritanopia',
+  };
 
   String get labelDe => switch (this) {
-        ColorProfile.normal => 'Normal',
-        ColorProfile.highContrast => 'Hoher Kontrast',
-        ColorProfile.deuteranopia => 'Deuteranopie',
-        ColorProfile.protanopia => 'Protanopie',
-        ColorProfile.tritanopia => 'Tritanopie',
-      };
+    ColorProfile.normal => 'Normal',
+    ColorProfile.highContrast => 'Hoher Kontrast',
+    ColorProfile.deuteranopia => 'Deuteranopie',
+    ColorProfile.protanopia => 'Protanopie',
+    ColorProfile.tritanopia => 'Tritanopie',
+  };
 }

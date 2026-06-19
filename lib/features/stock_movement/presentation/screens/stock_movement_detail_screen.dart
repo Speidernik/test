@@ -15,8 +15,7 @@ class StockMovementDetailScreen extends StatefulWidget {
       _StockMovementDetailScreenState();
 }
 
-class _StockMovementDetailScreenState
-    extends State<StockMovementDetailScreen> {
+class _StockMovementDetailScreenState extends State<StockMovementDetailScreen> {
   final _repo = StockMovementRepository();
   StockMovement? _movement;
   String? _feedbackMessage;
@@ -80,8 +79,10 @@ class _StockMovementDetailScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.movementId,
-            style: const TextStyle(fontWeight: FontWeight.w800)),
+        title: Text(
+          widget.movementId,
+          style: const TextStyle(fontWeight: FontWeight.w800),
+        ),
         leading: const BackButton(),
       ),
       body: movement == null
@@ -103,8 +104,10 @@ class _StockMovementDetailScreenState
                               icon: Icons.location_on_rounded,
                             ),
                           ),
-                          const Icon(Icons.arrow_forward_rounded,
-                              color: AppColors.amber),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            color: AppColors.amber,
+                          ),
                           Expanded(
                             child: _InfoBlock(
                               label: s.to,
@@ -119,9 +122,7 @@ class _StockMovementDetailScreenState
                         children: [
                           Text(
                             '${movement.confirmedCount} / ${movement.items.length} ${s.items}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                           const Spacer(),
@@ -141,10 +142,12 @@ class _StockMovementDetailScreenState
                         child: LinearProgressIndicator(
                           value: movement.progress,
                           minHeight: 6,
-                          backgroundColor:
-                              isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                          backgroundColor: isDark
+                              ? AppColors.darkBorder
+                              : AppColors.lightBorder,
                           valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.amber),
+                            AppColors.amber,
+                          ),
                         ),
                       ),
                     ],
@@ -174,7 +177,9 @@ class _StockMovementDetailScreenState
                         ? AppColors.error.withAlpha(26)
                         : AppColors.success.withAlpha(26),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     child: Row(
                       children: [
                         Icon(
@@ -210,8 +215,7 @@ class _StockMovementDetailScreenState
                       ScannerInputField(
                         hint: s.scanToConfirm,
                         onScan: _onScan,
-                        enabled:
-                            movement.status != MovementStatus.completed,
+                        enabled: movement.status != MovementStatus.completed,
                       ),
                       const SizedBox(height: 12),
                       if (movement.isFullyConfirmed &&
@@ -243,28 +247,32 @@ class _InfoBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 12, color: AppColors.amber),
-              const SizedBox(width: 4),
-              Text(label.toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 9,
-                      letterSpacing: 1,
-                      color: AppColors.darkTextSecondary,
-                      fontWeight: FontWeight.w600)),
-            ],
+          Icon(icon, size: 12, color: AppColors.amber),
+          const SizedBox(width: 4),
+          Text(
+            label.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 9,
+              letterSpacing: 1,
+              color: AppColors.darkTextSecondary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 2),
-          Text(value,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(fontWeight: FontWeight.w600)),
         ],
-      );
+      ),
+      const SizedBox(height: 2),
+      Text(
+        value,
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+      ),
+    ],
+  );
 }
 
 class _ItemTile extends StatelessWidget {
@@ -274,76 +282,83 @@ class _ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: item.isConfirmed
-              ? AppColors.success.withAlpha(20)
-              : isDark
-                  ? AppColors.darkSurface
-                  : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: item.isConfirmed
+          ? AppColors.success.withAlpha(20)
+          : isDark
+          ? AppColors.darkSurface
+          : Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(
+        color: item.isConfirmed
+            ? AppColors.success.withAlpha(77)
+            : isDark
+            ? AppColors.darkBorder
+            : AppColors.lightBorder,
+      ),
+    ),
+    child: Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
             color: item.isConfirmed
-                ? AppColors.success.withAlpha(77)
-                : isDark
-                    ? AppColors.darkBorder
-                    : AppColors.lightBorder,
+                ? AppColors.success.withAlpha(26)
+                : AppColors.amber.withAlpha(26),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            item.isConfirmed ? Icons.check_rounded : Icons.inventory_2_rounded,
+            color: item.isConfirmed ? AppColors.success : AppColors.amber,
+            size: 18,
           ),
         ),
-        child: Row(
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.sku,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.amber,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                ),
+              ),
+              Text(
+                item.description,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: item.isConfirmed
-                    ? AppColors.success.withAlpha(26)
-                    : AppColors.amber.withAlpha(26),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                item.isConfirmed
-                    ? Icons.check_rounded
-                    : Icons.inventory_2_rounded,
-                color: item.isConfirmed ? AppColors.success : AppColors.amber,
-                size: 18,
-              ),
+            Text(
+              '× ${item.quantity}',
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.sku,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.amber,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 11)),
-                  Text(item.description,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w600)),
-                ],
+            if (item.isConfirmed)
+              const Text(
+                '✓',
+                style: TextStyle(
+                  color: AppColors.success,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text('× ${item.quantity}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700)),
-                if (item.isConfirmed)
-                  const Text('✓',
-                      style: TextStyle(
-                          color: AppColors.success, fontWeight: FontWeight.w700)),
-              ],
-            ),
           ],
         ),
-      );
+      ],
+    ),
+  );
 }
 
 class _CompleteButton extends StatelessWidget {
@@ -358,26 +373,28 @@ class _CompleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: double.infinity,
-        child: FilledButton.icon(
-          onPressed: isLoading ? null : onPressed,
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.success,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          icon: isLoading
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.white),
-                )
-              : const Icon(Icons.check_circle_rounded, color: Colors.white),
-          label: Text(label,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, letterSpacing: 0.5)),
-        ),
-      );
+    width: double.infinity,
+    child: FilledButton.icon(
+      onPressed: isLoading ? null : onPressed,
+      style: FilledButton.styleFrom(
+        backgroundColor: AppColors.success,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      icon: isLoading
+          ? const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+          : const Icon(Icons.check_circle_rounded, color: Colors.white),
+      label: Text(
+        label,
+        style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+      ),
+    ),
+  );
 }

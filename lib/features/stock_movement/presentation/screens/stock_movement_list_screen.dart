@@ -48,9 +48,13 @@ class _StockMovementListScreenState extends State<StockMovementListScreen> {
             children: [
               _iconBox(Icons.swap_horiz_rounded),
               const SizedBox(width: 10),
-              Text(s.stockMovements,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, letterSpacing: 0.5)),
+              Text(
+                s.stockMovements,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5,
+                ),
+              ),
             ],
           ),
           pinned: true,
@@ -70,8 +74,10 @@ class _StockMovementListScreenState extends State<StockMovementListScreen> {
         else if (_filtered.isEmpty)
           SliverFillRemaining(
             child: Center(
-              child: Text(s.noData,
-                  style: Theme.of(context).textTheme.bodyMedium),
+              child: Text(
+                s.noData,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           )
         else
@@ -85,7 +91,8 @@ class _StockMovementListScreenState extends State<StockMovementListScreen> {
                 return _MovementCard(
                   movement: m,
                   isDark: isDark,
-                  isGerman: context.watch<SettingsNotifier>().language ==
+                  isGerman:
+                      context.watch<SettingsNotifier>().language ==
                       AppLanguage.german,
                   onTap: () async {
                     await Navigator.of(context).push(
@@ -105,13 +112,13 @@ class _StockMovementListScreenState extends State<StockMovementListScreen> {
   }
 
   Widget _iconBox(IconData icon) => Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: AppColors.amber,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(icon, color: Colors.white, size: 18),
-      );
+    padding: const EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      color: AppColors.amber,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Icon(icon, color: Colors.white, size: 18),
+  );
 }
 
 class _FilterBar extends StatelessWidget {
@@ -133,19 +140,29 @@ class _FilterBar extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            _Chip(label: 'All', selected: current == null,
-                onTap: () => onChanged(null)),
+            _Chip(
+              label: 'All',
+              selected: current == null,
+              onTap: () => onChanged(null),
+            ),
             const SizedBox(width: 8),
-            _Chip(label: 'Pending', selected: current == MovementStatus.pending,
-                onTap: () => onChanged(MovementStatus.pending)),
+            _Chip(
+              label: 'Pending',
+              selected: current == MovementStatus.pending,
+              onTap: () => onChanged(MovementStatus.pending),
+            ),
             const SizedBox(width: 8),
-            _Chip(label: 'In Progress',
-                selected: current == MovementStatus.inProgress,
-                onTap: () => onChanged(MovementStatus.inProgress)),
+            _Chip(
+              label: 'In Progress',
+              selected: current == MovementStatus.inProgress,
+              onTap: () => onChanged(MovementStatus.inProgress),
+            ),
             const SizedBox(width: 8),
-            _Chip(label: 'Completed',
-                selected: current == MovementStatus.completed,
-                onTap: () => onChanged(MovementStatus.completed)),
+            _Chip(
+              label: 'Completed',
+              selected: current == MovementStatus.completed,
+              onTap: () => onChanged(MovementStatus.completed),
+            ),
           ],
         ),
       ),
@@ -154,34 +171,38 @@ class _FilterBar extends StatelessWidget {
 }
 
 class _Chip extends StatelessWidget {
-  const _Chip({required this.label, required this.selected, required this.onTap});
+  const _Chip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.amber : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: selected ? AppColors.amber : AppColors.darkBorder,
-            ),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: selected ? Colors.white : null,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-              fontSize: 13,
-            ),
-          ),
+    onTap: onTap,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: selected ? AppColors.amber : Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: selected ? AppColors.amber : AppColors.darkBorder,
         ),
-      );
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: selected ? Colors.white : null,
+          fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+          fontSize: 13,
+        ),
+      ),
+    ),
+  );
 }
 
 class _MovementCard extends StatelessWidget {
@@ -197,10 +218,10 @@ class _MovementCard extends StatelessWidget {
   final VoidCallback onTap;
 
   Color get _statusColor => switch (movement.status) {
-        MovementStatus.pending => AppColors.warning,
-        MovementStatus.inProgress => const Color(0xFF6366F1),
-        MovementStatus.completed => AppColors.success,
-      };
+    MovementStatus.pending => AppColors.warning,
+    MovementStatus.inProgress => const Color(0xFF6366F1),
+    MovementStatus.completed => AppColors.success,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -213,16 +234,21 @@ class _MovementCard extends StatelessWidget {
           color: isDark ? AppColors.darkSurface : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
+            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text(movement.id,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700, fontSize: 13)),
+                Text(
+                  movement.id,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                  ),
+                ),
                 const Spacer(),
                 _StatusBadge(
                   label: movement.status.label(isGerman),
@@ -231,28 +257,28 @@ class _MovementCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            _LocationRow(
-              from: movement.fromLocation,
-              to: movement.toLocation,
-            ),
+            _LocationRow(from: movement.fromLocation, to: movement.toLocation),
             const SizedBox(height: 10),
             Row(
               children: [
-                Icon(Icons.person_outline_rounded,
-                    size: 14,
-                    color: isDark
-                        ? AppColors.darkTextSecondary
-                        : AppColors.lightTextSecondary),
+                Icon(
+                  Icons.person_outline_rounded,
+                  size: 14,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.lightTextSecondary,
+                ),
                 const SizedBox(width: 4),
-                Text(movement.operatorName,
-                    style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  movement.operatorName,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 const Spacer(),
                 Text(
                   '${movement.confirmedCount}/${movement.items.length} items',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -266,8 +292,9 @@ class _MovementCard extends StatelessWidget {
                   backgroundColor: isDark
                       ? AppColors.darkBorder
                       : AppColors.lightBorder,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(AppColors.amber),
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    AppColors.amber,
+                  ),
                 ),
               ),
             ],
@@ -285,16 +312,17 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: color.withAlpha(26),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withAlpha(77)),
-        ),
-        child: Text(label,
-            style: TextStyle(
-                color: color, fontSize: 11, fontWeight: FontWeight.w600)),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    decoration: BoxDecoration(
+      color: color.withAlpha(26),
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(color: color.withAlpha(77)),
+    ),
+    child: Text(
+      label,
+      style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600),
+    ),
+  );
 }
 
 class _LocationRow extends StatelessWidget {
@@ -304,44 +332,59 @@ class _LocationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('FROM',
-                    style: TextStyle(
-                        fontSize: 9,
-                        letterSpacing: 1,
-                        color: AppColors.darkTextSecondary,
-                        fontWeight: FontWeight.w600)),
-                Text(from,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600)),
-              ],
+    children: [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'FROM',
+              style: TextStyle(
+                fontSize: 9,
+                letterSpacing: 1,
+                color: AppColors.darkTextSecondary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Icon(Icons.arrow_forward_rounded,
-                size: 16, color: AppColors.amber),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('TO',
-                    style: TextStyle(
-                        fontSize: 9,
-                        letterSpacing: 1,
-                        color: AppColors.darkTextSecondary,
-                        fontWeight: FontWeight.w600)),
-                Text(to,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600)),
-              ],
+            Text(
+              from,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
             ),
-          ),
-        ],
-      );
+          ],
+        ),
+      ),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Icon(
+          Icons.arrow_forward_rounded,
+          size: 16,
+          color: AppColors.amber,
+        ),
+      ),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'TO',
+              style: TextStyle(
+                fontSize: 9,
+                letterSpacing: 1,
+                color: AppColors.darkTextSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              to,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }

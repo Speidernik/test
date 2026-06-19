@@ -2,10 +2,10 @@ enum PickingStatus { open, inProgress, completed }
 
 extension PickingStatusLabel on PickingStatus {
   String label(bool de) => switch (this) {
-        PickingStatus.open => de ? 'Offen' : 'Open',
-        PickingStatus.inProgress => de ? 'In Bearbeitung' : 'In Progress',
-        PickingStatus.completed => de ? 'Abgeschlossen' : 'Completed',
-      };
+    PickingStatus.open => de ? 'Offen' : 'Open',
+    PickingStatus.inProgress => de ? 'In Bearbeitung' : 'In Progress',
+    PickingStatus.completed => de ? 'Abgeschlossen' : 'Completed',
+  };
 }
 
 class PickingList {

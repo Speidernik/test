@@ -10,12 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final settings = SettingsNotifier();
   await settings.init();
-  runApp(
-    ChangeNotifierProvider.value(
-      value: settings,
-      child: const MyApp(),
-    ),
-  );
+  runApp(ChangeNotifierProvider.value(value: settings, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

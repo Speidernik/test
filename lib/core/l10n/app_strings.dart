@@ -6,8 +6,7 @@ class AppStrings {
 
   static const supportedLocales = [Locale('en'), Locale('de')];
 
-  String _t(String en, String de) =>
-      locale.languageCode == 'de' ? de : en;
+  String _t(String en, String de) => locale.languageCode == 'de' ? de : en;
 
   // Auth
   String get appName => _t('Warehouse Pro', 'Warehouse Pro');
@@ -20,8 +19,10 @@ class AppStrings {
   String get dontHaveAccount => _t("Don't have an account?", 'Kein Konto?');
   String get accessDashboard =>
       _t('Access your warehouse dashboard', 'Zugriff auf Ihr Lager-Dashboard');
-  String get invalidCredentials =>
-      _t('Invalid credentials. Please try again.', 'Ungültige Anmeldedaten. Bitte erneut versuchen.');
+  String get invalidCredentials => _t(
+    'Invalid credentials. Please try again.',
+    'Ungültige Anmeldedaten. Bitte erneut versuchen.',
+  );
 
   // Navigation
   String get dashboard => _t('Dashboard', 'Übersicht');
@@ -57,8 +58,10 @@ class AppStrings {
   String get allItemsConfirmed =>
       _t('All items confirmed!', 'Alle Artikel bestätigt!');
   String get itemConfirmed => _t('Item confirmed!', 'Artikel bestätigt!');
-  String get barcodeNotFound =>
-      _t('Barcode not found in this movement.', 'Barcode in dieser Bewegung nicht gefunden.');
+  String get barcodeNotFound => _t(
+    'Barcode not found in this movement.',
+    'Barcode in dieser Bewegung nicht gefunden.',
+  );
   String get alreadyConfirmed =>
       _t('Item already confirmed.', 'Artikel bereits bestätigt.');
 
@@ -69,8 +72,7 @@ class AppStrings {
   String get location => _t('Location', 'Lagerort');
   String get quantity => _t('Qty', 'Menge');
   String get picked => _t('Picked', 'Kommissioniert');
-  String get scanItem =>
-      _t('Scan item barcode', 'Artikel-Barcode scannen');
+  String get scanItem => _t('Scan item barcode', 'Artikel-Barcode scannen');
   String get correctScan =>
       _t('Correct! Item picked.', 'Richtig! Artikel kommissioniert.');
   String get wrongBarcode =>
@@ -92,17 +94,19 @@ class AppStrings {
   String get colorDeuteranopia => _t('Deuteranopia', 'Deuteranopie');
   String get colorProtanopia => _t('Protanopia', 'Protanopie');
   String get colorTritanopia => _t('Tritanopia', 'Tritanopie');
-  String get colorProfileHint =>
-      _t('Adjust colors for color vision differences',
-          'Farben für Farbsehschwächen anpassen');
+  String get colorProfileHint => _t(
+    'Adjust colors for color vision differences',
+    'Farben für Farbsehschwächen anpassen',
+  );
   String get langEnglish => _t('English', 'Englisch');
   String get langGerman => _t('German', 'Deutsch');
   String get about => _t('About', 'Über die App');
   String get version => _t('Version', 'Version');
   String get scanner => _t('Scanner', 'Scanner');
-  String get scannerHint =>
-      _t('Zebra DataWedge — configure profile to send action: com.starter_app.ACTION_SCAN',
-          'Zebra DataWedge — Profil konfigurieren mit Aktion: com.starter_app.ACTION_SCAN');
+  String get scannerHint => _t(
+    'Zebra DataWedge — configure profile to send action: com.starter_app.ACTION_SCAN',
+    'Zebra DataWedge — Profil konfigurieren mit Aktion: com.starter_app.ACTION_SCAN',
+  );
 
   // General
   String get cancel => _t('Cancel', 'Abbrechen');

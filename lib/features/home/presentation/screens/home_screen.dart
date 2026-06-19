@@ -29,10 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final s = context.watch<SettingsNotifier>().strings;
 
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _tabs,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _tabs),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (i) => setState(() => _selectedIndex = i),
@@ -85,16 +82,20 @@ class _DashboardTab extends StatelessWidget {
                   color: AppColors.amber,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.warehouse_rounded,
-                    color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.warehouse_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
               const SizedBox(width: 10),
               const Text(
                 'WAREHOUSE PRO',
                 style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.5,
-                    fontSize: 16),
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.5,
+                  fontSize: 16,
+                ),
               ),
             ],
           ),
@@ -102,7 +103,8 @@ class _DashboardTab extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon(
-                  isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+                isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              ),
               tooltip: isDark ? 'Light mode' : 'Dark mode',
               onPressed: settings.toggleTheme,
             ),
@@ -125,10 +127,10 @@ class _DashboardTab extends StatelessWidget {
               Text(
                 s.overview.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      letterSpacing: 1.5,
-                      color: AppColors.amber,
-                      fontSize: 11,
-                    ),
+                  letterSpacing: 1.5,
+                  color: AppColors.amber,
+                  fontSize: 11,
+                ),
               ),
               const SizedBox(height: 12),
               GridView.count(
@@ -173,10 +175,10 @@ class _DashboardTab extends StatelessWidget {
               Text(
                 s.recentActivity.toUpperCase(),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      letterSpacing: 1.5,
-                      color: AppColors.amber,
-                      fontSize: 11,
-                    ),
+                  letterSpacing: 1.5,
+                  color: AppColors.amber,
+                  fontSize: 11,
+                ),
               ),
               const SizedBox(height: 12),
               _ActivityList(isDark: isDark),
@@ -196,50 +198,52 @@ class _WelcomeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.amberLight, AppColors.amberDark],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.amber.withAlpha(77),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
+    width: double.infinity,
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [AppColors.amberLight, AppColors.amberDark],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.amber.withAlpha(77),
+          blurRadius: 16,
+          offset: const Offset(0, 6),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    s.goodMorning,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    s.warehouseRunning,
-                    style: TextStyle(
-                        color: Colors.white.withAlpha(204), fontSize: 13),
-                  ),
-                ],
+      ],
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                s.goodMorning,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-            ),
-            const Icon(Icons.check_circle_rounded,
-                color: Colors.white, size: 40),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                s.warehouseRunning,
+                style: TextStyle(
+                  color: Colors.white.withAlpha(204),
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
         ),
-      );
+        const Icon(Icons.check_circle_rounded, color: Colors.white, size: 40),
+      ],
+    ),
+  );
 }
 
 class _StatCard extends StatelessWidget {
@@ -258,50 +262,55 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
-          boxShadow: isDark
-              ? null
-              : [
-                  BoxShadow(
-                      color: Colors.black.withAlpha(10),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4)),
-                ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withAlpha(26),
-                borderRadius: BorderRadius.circular(10),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: isDark ? AppColors.darkSurface : Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+      ),
+      boxShadow: isDark
+          ? null
+          : [
+              BoxShadow(
+                color: Colors.black.withAlpha(10),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
-              child: Icon(icon, color: color, size: 20),
+            ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withAlpha(26),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: color, size: 20),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              value,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(value,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w800)),
-                Text(label,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-              ],
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
-      );
+      ],
+    ),
+  );
 }
 
 class _ActivityList extends StatelessWidget {
@@ -341,32 +350,35 @@ class _ActivityList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder),
-        ),
-        child: Column(
-          children: _items
-              .asMap()
-              .entries
-              .map((e) => Column(
-                    children: [
-                      _ActivityTile(item: e.value),
-                      if (e.key < _items.length - 1)
-                        Divider(
-                          height: 1,
-                          indent: 60,
-                          color: isDark
-                              ? AppColors.darkBorder
-                              : AppColors.lightBorder,
-                        ),
-                    ],
-                  ))
-              .toList(),
-        ),
-      );
+    decoration: BoxDecoration(
+      color: isDark ? AppColors.darkSurface : Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+      ),
+    ),
+    child: Column(
+      children: _items
+          .asMap()
+          .entries
+          .map(
+            (e) => Column(
+              children: [
+                _ActivityTile(item: e.value),
+                if (e.key < _items.length - 1)
+                  Divider(
+                    height: 1,
+                    indent: 60,
+                    color: isDark
+                        ? AppColors.darkBorder
+                        : AppColors.lightBorder,
+                  ),
+              ],
+            ),
+          )
+          .toList(),
+    ),
+  );
 }
 
 class _ActivityItem {
@@ -390,41 +402,40 @@ class _ActivityTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: item.color.withAlpha(26),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(item.icon, color: item.color, size: 18),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 2),
-                  Text(item.subtitle,
-                      style: Theme.of(context).textTheme.bodySmall),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(item.time,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 11)),
-          ],
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    child: Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: item.color.withAlpha(26),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(item.icon, color: item.color, size: 18),
         ),
-      );
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.title,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 2),
+              Text(item.subtitle, style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          item.time,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+        ),
+      ],
+    ),
+  );
 }

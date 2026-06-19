@@ -2,10 +2,10 @@ enum MovementStatus { pending, inProgress, completed }
 
 extension MovementStatusLabel on MovementStatus {
   String label(bool de) => switch (this) {
-        MovementStatus.pending => de ? 'Ausstehend' : 'Pending',
-        MovementStatus.inProgress => de ? 'In Bearbeitung' : 'In Progress',
-        MovementStatus.completed => de ? 'Abgeschlossen' : 'Completed',
-      };
+    MovementStatus.pending => de ? 'Ausstehend' : 'Pending',
+    MovementStatus.inProgress => de ? 'In Bearbeitung' : 'In Progress',
+    MovementStatus.completed => de ? 'Abgeschlossen' : 'Completed',
+  };
 }
 
 class StockMovement {
@@ -29,8 +29,7 @@ class StockMovement {
 
   int get confirmedCount => items.where((i) => i.isConfirmed).length;
   bool get isFullyConfirmed => confirmedCount == items.length;
-  double get progress =>
-      items.isEmpty ? 0 : confirmedCount / items.length;
+  double get progress => items.isEmpty ? 0 : confirmedCount / items.length;
 }
 
 class StockMovementItem {

@@ -19,7 +19,10 @@ class AppTheme {
         onPrimary: Colors.white,
         onSurface: AppColors.darkTextPrimary,
       ),
-      textTheme: _textTheme(AppColors.darkTextPrimary, AppColors.darkTextSecondary),
+      textTheme: _textTheme(
+        AppColors.darkTextPrimary,
+        AppColors.darkTextSecondary,
+      ),
       inputDecorationTheme: _inputTheme(
         fill: AppColors.darkCard,
         border: AppColors.darkBorder,
@@ -50,10 +53,15 @@ class AppTheme {
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return TextStyle(
-                color: c.primary, fontSize: 11, fontWeight: FontWeight.w600);
+              color: c.primary,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            );
           }
           return const TextStyle(
-              color: AppColors.darkTextSecondary, fontSize: 11);
+            color: AppColors.darkTextSecondary,
+            fontSize: 11,
+          );
         }),
       ),
       cardTheme: CardThemeData(
@@ -82,7 +90,10 @@ class AppTheme {
         onPrimary: Colors.white,
         onSurface: AppColors.lightTextPrimary,
       ),
-      textTheme: _textTheme(AppColors.lightTextPrimary, AppColors.lightTextSecondary),
+      textTheme: _textTheme(
+        AppColors.lightTextPrimary,
+        AppColors.lightTextSecondary,
+      ),
       inputDecorationTheme: _inputTheme(
         fill: Colors.white,
         border: AppColors.lightBorder,
@@ -113,12 +124,15 @@ class AppTheme {
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return TextStyle(
-                color: c.primaryDark,
-                fontSize: 11,
-                fontWeight: FontWeight.w600);
+              color: c.primaryDark,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            );
           }
           return const TextStyle(
-              color: AppColors.lightTextSecondary, fontSize: 11);
+            color: AppColors.lightTextSecondary,
+            fontSize: 11,
+          );
         }),
       ),
       cardTheme: CardThemeData(
@@ -134,19 +148,19 @@ class AppTheme {
   }
 
   static TextTheme _textTheme(Color primary, Color secondary) => TextTheme(
-        displayLarge: TextStyle(color: primary, fontWeight: FontWeight.w900),
-        displayMedium: TextStyle(color: primary, fontWeight: FontWeight.w800),
-        headlineLarge: TextStyle(color: primary, fontWeight: FontWeight.w800),
-        headlineMedium: TextStyle(color: primary, fontWeight: FontWeight.w700),
-        headlineSmall: TextStyle(color: primary, fontWeight: FontWeight.w700),
-        titleLarge: TextStyle(color: primary, fontWeight: FontWeight.w700),
-        titleMedium: TextStyle(color: primary, fontWeight: FontWeight.w600),
-        titleSmall: TextStyle(color: secondary, fontWeight: FontWeight.w600),
-        bodyLarge: TextStyle(color: primary),
-        bodyMedium: TextStyle(color: primary),
-        bodySmall: TextStyle(color: secondary, fontSize: 12),
-        labelLarge: TextStyle(color: primary, fontWeight: FontWeight.w600),
-      );
+    displayLarge: TextStyle(color: primary, fontWeight: FontWeight.w900),
+    displayMedium: TextStyle(color: primary, fontWeight: FontWeight.w800),
+    headlineLarge: TextStyle(color: primary, fontWeight: FontWeight.w800),
+    headlineMedium: TextStyle(color: primary, fontWeight: FontWeight.w700),
+    headlineSmall: TextStyle(color: primary, fontWeight: FontWeight.w700),
+    titleLarge: TextStyle(color: primary, fontWeight: FontWeight.w700),
+    titleMedium: TextStyle(color: primary, fontWeight: FontWeight.w600),
+    titleSmall: TextStyle(color: secondary, fontWeight: FontWeight.w600),
+    bodyLarge: TextStyle(color: primary),
+    bodyMedium: TextStyle(color: primary),
+    bodySmall: TextStyle(color: secondary, fontSize: 12),
+    labelLarge: TextStyle(color: primary, fontWeight: FontWeight.w600),
+  );
 
   static InputDecorationTheme _inputTheme({
     required Color fill,
@@ -154,35 +168,33 @@ class AppTheme {
     required Color label,
     required Color hint,
     required Color focusBorder,
-  }) =>
-      InputDecorationTheme(
-        filled: true,
-        fillColor: fill,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        labelStyle: TextStyle(color: label, fontSize: 14),
-        hintStyle: TextStyle(color: hint.withAlpha(153), fontSize: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: focusBorder, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.error, width: 2),
-        ),
-      );
+  }) => InputDecorationTheme(
+    filled: true,
+    fillColor: fill,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    labelStyle: TextStyle(color: label, fontSize: 14),
+    hintStyle: TextStyle(color: hint.withAlpha(153), fontSize: 14),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: border),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: border),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: focusBorder, width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.error),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: AppColors.error, width: 2),
+    ),
+  );
 
   static ElevatedButtonThemeData _buttonTheme(Color primary) =>
       ElevatedButtonThemeData(
@@ -191,10 +203,14 @@ class AppTheme {
           foregroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12)),
+            borderRadius: BorderRadius.circular(12),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           textStyle: const TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, letterSpacing: 1),
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          ),
         ),
       );
 }

@@ -28,24 +28,32 @@ class WarehouseLogo extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.warehouse_rounded, size: 50, color: Colors.white),
+          child: const Icon(
+            Icons.warehouse_rounded,
+            size: 50,
+            color: Colors.white,
+          ),
         ),
         const SizedBox(height: 20),
         Text(
           'WAREHOUSE PRO',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 4,
-                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-              ),
+            fontWeight: FontWeight.w900,
+            letterSpacing: 4,
+            color: isDark
+                ? AppColors.darkTextPrimary
+                : AppColors.lightTextPrimary,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
           'Warehouse Management System',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                letterSpacing: 0.5,
-              ),
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.lightTextSecondary,
+            letterSpacing: 0.5,
+          ),
         ),
       ],
     );
