@@ -133,7 +133,7 @@ jobs:
         run: |
           flutter build apk \
             --release \
-            --build-name="${{ steps.meta.outputs.version }}" \
+            --build-name="${{ steps.meta.outputs.tag }}" \
             --build-number="${{ steps.meta.outputs.build_number }}"
 
       # ── Stage & checksum ──────────────────────────────────────────────────
@@ -172,15 +172,15 @@ jobs:
 
       - name: Generate release body
         run: |
-          VERSION="${{ needs.build.outputs.version }}"
+          TAG="${{ needs.build.outputs.tag }}"
           BUILD="${{ needs.build.outputs.build_number }}"
 
           cat > release_body.md << MARKDOWN
-          ## 🏭 Warehouse Pro v${VERSION} (build ${BUILD})
+          ## 🏭 Warehouse Pro ${TAG} (build ${BUILD})
 
           ### 📥 Installation
 
-          1. Download \`warehouse-pro-v${VERSION}.apk\` below
+          1. Download \`warehouse-pro-${TAG}.apk\` below
           2. Transfer to your Zebra device via USB or MDM
           3. Enable **Install from unknown sources** in device settings
           4. Install the APK
@@ -201,7 +201,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.build.outputs.tag }}
-          name: "🏭 Warehouse Pro v${{ needs.build.outputs.version }}"
+          name: "🏭 Warehouse Pro ${{ needs.build.outputs.tag }}"
           body_path: release_body.md
           generate_release_notes: true
           prerelease: ${{ github.event.inputs.prerelease == 'true' }}
