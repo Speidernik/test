@@ -16,6 +16,5 @@ class ResponsiveLayout extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) =>
-      isTablet(context) ? tablet : mobile;
+  Widget build(BuildContext context) => isTablet(context) ? tablet : mobile;
 }

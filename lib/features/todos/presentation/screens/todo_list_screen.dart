@@ -28,9 +28,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
         _isCreating = true;
       });
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const TodoDetailScreen()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const TodoDetailScreen()));
     }
   }
 
@@ -41,9 +41,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
         _isCreating = false;
       });
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => TodoDetailScreen(todo: todo)),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => TodoDetailScreen(todo: todo)));
     }
   }
 
@@ -244,24 +244,19 @@ class _TasksPanel extends StatelessWidget {
           ),
           _CategoryFilterBar(repo: repo),
           if (todos.isEmpty)
-            SliverFillRemaining(
-              child: _EmptyState(filter: repo.filter),
-            )
+            SliverFillRemaining(child: _EmptyState(filter: repo.filter))
           else
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (ctx, i) {
-                  final todo = todos[i];
-                  return TodoCard(
-                    key: ValueKey(todo.id),
-                    todo: todo,
-                    onToggle: () => repo.toggleComplete(todo.id),
-                    onTap: () => onCardTap(todo),
-                    onDelete: () => repo.deleteTodo(todo.id),
-                  );
-                },
-                childCount: todos.length,
-              ),
+              delegate: SliverChildBuilderDelegate((ctx, i) {
+                final todo = todos[i];
+                return TodoCard(
+                  key: ValueKey(todo.id),
+                  todo: todo,
+                  onToggle: () => repo.toggleComplete(todo.id),
+                  onTap: () => onCardTap(todo),
+                  onDelete: () => repo.deleteTodo(todo.id),
+                );
+              }, childCount: todos.length),
             ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
         ],
@@ -376,16 +371,18 @@ class _CategoryFilterBar extends StatelessWidget {
                 onSelected: (_) => repo.setCategoryFilter(null),
               ),
             ),
-            ...TodoCategory.values.map((c) => Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: ChoiceChip(
-                    label: Text(c.label),
-                    selected: repo.categoryFilter == c,
-                    onSelected: (_) => repo.setCategoryFilter(
-                      repo.categoryFilter == c ? null : c,
-                    ),
+            ...TodoCategory.values.map(
+              (c) => Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: ChoiceChip(
+                  label: Text(c.label),
+                  selected: repo.categoryFilter == c,
+                  onSelected: (_) => repo.setCategoryFilter(
+                    repo.categoryFilter == c ? null : c,
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),

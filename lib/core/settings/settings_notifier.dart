@@ -20,8 +20,8 @@ class SettingsNotifier extends ChangeNotifier {
         ? ThemeMode.system
         : (darkVal ? ThemeMode.dark : ThemeMode.light);
     final profileIndex = prefs.getInt(_keyProfile) ?? 0;
-    _colorProfile =
-        ColorProfile.values[profileIndex.clamp(0, ColorProfile.values.length - 1)];
+    _colorProfile = ColorProfile
+        .values[profileIndex.clamp(0, ColorProfile.values.length - 1)];
     notifyListeners();
   }
 

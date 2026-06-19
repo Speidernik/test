@@ -91,13 +91,16 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
         content: const Text('This cannot be undone.'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
           TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(ctx).colorScheme.error),
-              child: const Text('Delete')),
+            onPressed: () => Navigator.pop(ctx, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(ctx).colorScheme.error,
+            ),
+            child: const Text('Delete'),
+          ),
         ],
       ),
     );
@@ -199,9 +202,12 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                     style: OutlinedButton.styleFrom(
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
@@ -233,7 +239,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                     foregroundColor: theme.colorScheme.error,
                     side: BorderSide(color: theme.colorScheme.error),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text('Delete Task'),
@@ -266,8 +273,18 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
@@ -283,16 +300,18 @@ class _PrioritySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: Priority.values
-          .map((p) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: _PriorityChip(
-                    priority: p,
-                    isSelected: value == p,
-                    onTap: () => onChanged(p),
-                  ),
+          .map(
+            (p) => Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: _PriorityChip(
+                  priority: p,
+                  isSelected: value == p,
+                  onTap: () => onChanged(p),
                 ),
-              ))
+              ),
+            ),
+          )
           .toList(),
     );
   }
@@ -310,10 +329,10 @@ class _PriorityChip extends StatelessWidget {
   });
 
   Color get _color => switch (priority) {
-        Priority.high => const Color(0xFFEF4444),
-        Priority.medium => const Color(0xFFF97316),
-        Priority.low => const Color(0xFF22C55E),
-      };
+    Priority.high => const Color(0xFFEF4444),
+    Priority.medium => const Color(0xFFF97316),
+    Priority.low => const Color(0xFF22C55E),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -326,7 +345,9 @@ class _PriorityChip extends StatelessWidget {
           color: isSelected ? _color : _color.withAlpha(20),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: isSelected ? _color : _color.withAlpha(60), width: 1.5),
+            color: isSelected ? _color : _color.withAlpha(60),
+            width: 1.5,
+          ),
         ),
         child: Center(
           child: Text(
@@ -362,15 +383,13 @@ class _CategorySelector extends StatelessWidget {
             label: Text(c.label),
             selected: selected,
             onSelected: (_) => onChanged(selected ? null : c),
-            selectedColor:
-                theme.colorScheme.primary.withAlpha(40),
+            selectedColor: theme.colorScheme.primary.withAlpha(40),
             checkmarkColor: theme.colorScheme.primary,
             labelStyle: TextStyle(
               color: selected
                   ? theme.colorScheme.primary
                   : theme.colorScheme.onSurface,
-              fontWeight:
-                  selected ? FontWeight.w600 : FontWeight.normal,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             ),
           );
         }),

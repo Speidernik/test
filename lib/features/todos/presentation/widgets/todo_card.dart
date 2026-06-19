@@ -56,8 +56,9 @@ class TodoCard extends StatelessWidget {
                       Text(
                         todo.title,
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          decoration:
-                              isDone ? TextDecoration.lineThrough : null,
+                          decoration: isDone
+                              ? TextDecoration.lineThrough
+                              : null,
                           color: isDone
                               ? theme.colorScheme.onSurface.withAlpha(100)
                               : null,
@@ -91,8 +92,7 @@ class TodoCard extends StatelessWidget {
                               icon: Icons.calendar_today,
                               color: _isOverdue(todo)
                                   ? theme.colorScheme.error
-                                  : theme.colorScheme.onSurface
-                                      .withAlpha(120),
+                                  : theme.colorScheme.onSurface.withAlpha(120),
                             ),
                         ],
                       ),
@@ -116,8 +116,18 @@ class TodoCard extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
@@ -135,10 +145,10 @@ class _PriorityCheckbox extends StatelessWidget {
   });
 
   Color _priorityColor(BuildContext context) => switch (priority) {
-        Priority.high => const Color(0xFFEF4444),
-        Priority.medium => const Color(0xFFF97316),
-        Priority.low => const Color(0xFF22C55E),
-      };
+    Priority.high => const Color(0xFFEF4444),
+    Priority.medium => const Color(0xFFF97316),
+    Priority.low => const Color(0xFF22C55E),
+  };
 
   @override
   Widget build(BuildContext context) {

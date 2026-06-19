@@ -33,12 +33,12 @@ class TodoRepository extends ChangeNotifier {
       TodoFilter.active => result.where((t) => !t.isCompleted).toList(),
       TodoFilter.completed => result.where((t) => t.isCompleted).toList(),
       TodoFilter.today => result.where((t) {
-          if (t.dueDate == null) return false;
-          final now = DateTime.now();
-          return t.dueDate!.year == now.year &&
-              t.dueDate!.month == now.month &&
-              t.dueDate!.day == now.day;
-        }).toList(),
+        if (t.dueDate == null) return false;
+        final now = DateTime.now();
+        return t.dueDate!.year == now.year &&
+            t.dueDate!.month == now.month &&
+            t.dueDate!.day == now.day;
+      }).toList(),
     };
 
     result.sort((a, b) {

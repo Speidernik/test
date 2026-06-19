@@ -91,9 +91,7 @@ class _ThemeTile extends StatelessWidget {
         ],
         selected: {settings.themeMode},
         onSelectionChanged: (s) => settings.setThemeMode(s.first),
-        style: const ButtonStyle(
-          visualDensity: VisualDensity.compact,
-        ),
+        style: const ButtonStyle(visualDensity: VisualDensity.compact),
       ),
     );
   }
@@ -112,7 +110,9 @@ class _ColorProfileTile extends StatelessWidget {
       children: [
         RadioGroup<ColorProfile>(
           groupValue: settings.colorProfile,
-          onChanged: (v) { if (v != null) settings.setColorProfile(v); },
+          onChanged: (v) {
+            if (v != null) settings.setColorProfile(v);
+          },
           child: Column(
             children: ColorProfile.values
                 .map(

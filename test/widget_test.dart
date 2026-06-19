@@ -51,12 +51,15 @@ void main() {
     await tester.pumpWidget(_testApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('No tasks yet.\nTap + to add your first task.'),
-        findsOneWidget);
+    expect(
+      find.text('No tasks yet.\nTap + to add your first task.'),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('Bottom navigation bar has Tasks and Settings tabs',
-      (tester) async {
+  testWidgets('Bottom navigation bar has Tasks and Settings tabs', (
+    tester,
+  ) async {
     await tester.pumpWidget(_testApp());
     await tester.pumpAndSettle();
 
