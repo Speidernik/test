@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsNotifier>();
     return MaterialApp(
-      title: 'Warehouse Pro',
+      title: 'Warehouse Pro X',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.buildLight(settings.colorProfile),
       darkTheme: AppTheme.buildDark(settings.colorProfile),
