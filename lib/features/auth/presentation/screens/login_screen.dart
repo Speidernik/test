@@ -125,8 +125,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     hintText: 'you@company.com',
                                   ),
                                   validator: (v) {
-                                    if (v == null || v.trim().isEmpty)
+                                    if (v == null || v.trim().isEmpty) {
                                       return 'Email is required';
+                                    }
                                     if (!RegExp(
                                       r'^[^@]+@[^@]+\.[^@]+',
                                     ).hasMatch(v)) {
@@ -159,10 +160,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   validator: (v) {
-                                    if (v == null || v.isEmpty)
+                                    if (v == null || v.isEmpty) {
                                       return 'Password is required';
-                                    if (v.length < 6)
+                                    }
+                                    if (v.length < 6) {
                                       return 'Minimum 6 characters';
+                                    }
                                     return null;
                                   },
                                 ),
