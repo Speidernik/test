@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starter_app/core/settings/settings_notifier.dart';
@@ -13,7 +14,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -21,9 +23,28 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
   String? _errorMessage;
+  late final AnimationController _animController;
+  late final Animation<double> _fadeAnim;
+  late final Animation<Offset> _slideAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 650),
+    );
+    _fadeAnim = CurvedAnimation(parent: _animController, curve: Curves.easeOut);
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
+    _animController.forward();
+  }
 
   @override
   void dispose() {
+    _animController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -79,138 +100,147 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 28),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16),
-                          const WarehouseLogo(),
-                          const SizedBox(height: 36),
-                          _FormCard(
-                            isDark: isDark,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Sign In',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.5,
-                                      ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Access your warehouse dashboard',
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        color: isDark
-                                            ? AppColors.darkTextSecondary
-                                            : AppColors.lightTextSecondary,
-                                      ),
-                                ),
-                                const SizedBox(height: 28),
-                                TextFormField(
-                                  controller: _emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Email Address',
-                                    prefixIcon: Icon(
-                                      Icons.alternate_email_rounded,
-                                    ),
-                                    hintText: 'you@company.com',
-                                  ),
-                                  validator: (v) {
-                                    if (v == null || v.trim().isEmpty) {
-                                      return 'Email is required';
-                                    }
-                                    if (!RegExp(
-                                      r'^[^@]+@[^@]+\.[^@]+',
-                                    ).hasMatch(v)) {
-                                      return 'Enter a valid email';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: _passwordController,
-                                  obscureText: _obscurePassword,
-                                  textInputAction: TextInputAction.done,
-                                  onFieldSubmitted: (_) => _login(),
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    prefixIcon: const Icon(
-                                      Icons.lock_outline_rounded,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        _obscurePassword
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                      ),
-                                      onPressed: () => setState(
-                                        () => _obscurePassword =
-                                            !_obscurePassword,
-                                      ),
-                                    ),
-                                  ),
-                                  validator: (v) {
-                                    if (v == null || v.isEmpty) {
-                                      return 'Password is required';
-                                    }
-                                    if (v.length < 6) {
-                                      return 'Minimum 6 characters';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: const Text('Forgot password?'),
-                                  ),
-                                ),
-                                if (_errorMessage != null) ...[
-                                  const SizedBox(height: 4),
-                                  _ErrorBanner(message: _errorMessage!),
-                                  const SizedBox(height: 12),
-                                ],
-                                const SizedBox(height: 4),
-                                _SignInButton(
-                                  isLoading: _isLoading,
-                                  onPressed: _login,
-                                ),
-                                const SizedBox(height: 4),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 28),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: FadeTransition(
+                      opacity: _fadeAnim,
+                      child: SlideTransition(
+                        position: _slideAnim,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
                             children: [
-                              Text(
-                                "Don't have an account?",
-                                style: TextStyle(
-                                  color: isDark
-                                      ? AppColors.darkTextSecondary
-                                      : AppColors.lightTextSecondary,
-                                  fontSize: 13,
+                              const SizedBox(height: 24),
+                              const WarehouseLogo(),
+                              const SizedBox(height: 40),
+                              _FormCard(
+                                isDark: isDark,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      'Welcome back',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: -0.5,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Sign in to your warehouse dashboard',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: isDark
+                                                ? AppColors.darkTextSecondary
+                                                : AppColors.lightTextSecondary,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 28),
+                                    TextFormField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Email Address',
+                                        prefixIcon: Icon(
+                                          Icons.alternate_email_rounded,
+                                        ),
+                                        hintText: 'you@company.com',
+                                      ),
+                                      validator: (v) {
+                                        if (v == null || v.trim().isEmpty) {
+                                          return 'Email is required';
+                                        }
+                                        if (!RegExp(
+                                          r'^[^@]+@[^@]+\.[^@]+',
+                                        ).hasMatch(v)) {
+                                          return 'Enter a valid email';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 16),
+                                    TextFormField(
+                                      controller: _passwordController,
+                                      obscureText: _obscurePassword,
+                                      textInputAction: TextInputAction.done,
+                                      onFieldSubmitted: (_) => _login(),
+                                      decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        prefixIcon: const Icon(
+                                          Icons.lock_outline_rounded,
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            _obscurePassword
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _obscurePassword =
+                                                !_obscurePassword,
+                                          ),
+                                        ),
+                                      ),
+                                      validator: (v) {
+                                        if (v == null || v.isEmpty) {
+                                          return 'Password is required';
+                                        }
+                                        if (v.length < 6) {
+                                          return 'Minimum 6 characters';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        onPressed: () {},
+                                        child: const Text('Forgot password?'),
+                                      ),
+                                    ),
+                                    if (_errorMessage != null) ...[
+                                      const SizedBox(height: 4),
+                                      _ErrorBanner(message: _errorMessage!),
+                                      const SizedBox(height: 12),
+                                    ],
+                                    const SizedBox(height: 4),
+                                    _SignInButton(
+                                      isLoading: _isLoading,
+                                      onPressed: _login,
+                                    ),
+                                    const SizedBox(height: 4),
+                                  ],
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {},
-                                child: const Text('Request Access'),
+                              const SizedBox(height: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Don't have an account?",
+                                    style: TextStyle(
+                                      color: isDark
+                                          ? AppColors.darkTextSecondary
+                                          : AppColors.lightTextSecondary,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: const Text('Request Access'),
+                                  ),
+                                ],
                               ),
+                              const SizedBox(height: 24),
                             ],
                           ),
-                          const SizedBox(height: 24),
-                        ],
+                        ),
                       ),
                     ),
                   ),
@@ -232,16 +262,57 @@ class _Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [AppColors.darkBg, AppColors.darkSurface]
-              : [AppColors.lightBgStart, AppColors.lightBgEnd],
+    final size = MediaQuery.of(context).size;
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: isDark
+                  ? [const Color(0xFF080E1A), AppColors.darkBg]
+                  : [const Color(0xFFEBF4FF), const Color(0xFFF5F8FF)],
+            ),
+          ),
         ),
-      ),
+        // Top-right amber orb
+        Positioned(
+          top: -size.height * 0.06,
+          right: -size.width * 0.18,
+          child: Container(
+            width: size.width * 0.70,
+            height: size.width * 0.70,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  AppColors.amber.withAlpha(isDark ? 55 : 80),
+                  AppColors.amber.withAlpha(0),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Bottom-left indigo orb
+        Positioned(
+          bottom: -size.height * 0.12,
+          left: -size.width * 0.22,
+          child: Container(
+            width: size.width * 0.85,
+            height: size.width * 0.85,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  const Color(0xFF6366F1).withAlpha(isDark ? 45 : 60),
+                  const Color(0xFF6366F1).withAlpha(0),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -305,26 +376,35 @@ class _FormCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: isDark
+                ? AppColors.darkSurface.withAlpha(210)
+                : Colors.white.withAlpha(215),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withAlpha(18)
+                  : Colors.white.withAlpha(200),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(isDark ? 60 : 14),
+                blurRadius: 36,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(28),
+          child: child,
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withAlpha(15),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                ),
-              ],
       ),
-      padding: const EdgeInsets.all(28),
-      child: child,
     );
   }
 }
@@ -378,21 +458,21 @@ class _SignInButton extends StatelessWidget {
                 colors: [AppColors.amberLight, AppColors.amberDark],
               ),
         color: isLoading ? AppColors.amber.withAlpha(128) : null,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: isLoading
             ? null
             : [
                 BoxShadow(
-                  color: AppColors.amber.withAlpha(89),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
+                  color: AppColors.amber.withAlpha(100),
+                  blurRadius: 20,
+                  offset: const Offset(0, 6),
                 ),
               ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           onTap: isLoading ? null : onPressed,
           child: Center(
             child: isLoading
